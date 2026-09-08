@@ -1,5 +1,7 @@
 import esbuild from "esbuild";
 import process from "process";
+import fs from "fs";
+import path from "path";
 import builtins from "builtin-modules";
 
 const banner = `/*
@@ -10,6 +12,17 @@ if you want to view the source, please visit the github repository of this plugi
 
 const prod = process.argv[2] === "production";
 const outdir = process.env.OUT_DIR || ".";
+
+/** manifest.json и styles.css нужны Obsidian рядом с main.js — esbuild их не трогает, копируем сами. */
+function copyStaticFiles() {
+  fs.mkdirSync(outdir, { recursive: true });
+  for (const name of ["manifest.json", "styles.css"]) {
+    const src = path.resolve(name);
+    if (fs.existsSync(src)) {
+      fs.copyFileSync(src, path.join(outdir, name));
+    }
+  }
+}
 
 const context = await esbuild.context({
   banner: { js: banner },
@@ -39,8 +52,11 @@ const context = await esbuild.context({
   outfile: `${outdir}/main.js`,
 });
 
+copyStaticFiles();
+
 if (prod) {
   await context.rebuild();
+  await context.dispose();
   process.exit(0);
 } else {
   await context.watch();
