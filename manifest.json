@@ -1,0 +1,10 @@
+{
+  "id": "smart-calendar",
+  "name": "Smart Calendar",
+  "version": "0.1.0",
+  "minAppVersion": "1.5.0",
+  "description": "Календарь с ежедневными, недельными, месячными, квартальными и годовыми заметками, автоприменением шаблонов и авто-раскладкой по папкам месяцев.",
+  "author": "gricheba",
+  "authorUrl": "",
+  "isDesktopOnly": false
+}
