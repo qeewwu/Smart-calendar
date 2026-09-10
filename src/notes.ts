@@ -39,7 +39,7 @@ export function findNote(app: App, date: Moment, g: Granularity, settings: Setti
 async function ensureFolder(app: App, path: string): Promise<void> {
   const existing = app.vault.getAbstractFileByPath(path);
   if (existing instanceof TFolder) return;
-  if (existing instanceof TFile) throw new Error(`Путь "${path}" занят файлом`);
+  if (existing instanceof TFile) throw new Error(`Path "${path}" is occupied by a file`);
 
   const parts = path.split("/").filter(Boolean);
   let current = "";
@@ -47,7 +47,7 @@ async function ensureFolder(app: App, path: string): Promise<void> {
     current = current ? `${current}/${part}` : part;
     const node = app.vault.getAbstractFileByPath(current);
     if (node instanceof TFolder) continue;
-    if (node instanceof TFile) throw new Error(`Путь "${current}" занят файлом`);
+    if (node instanceof TFile) throw new Error(`Path "${current}" is occupied by a file`);
     try {
       await app.vault.createFolder(current);
     } catch (e) {

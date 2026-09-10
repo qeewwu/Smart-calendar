@@ -16,25 +16,25 @@ export default class SmartCalendarPlugin extends Plugin {
 
     this.registerView(VIEW_TYPE_SMART_CALENDAR, (leaf: WorkspaceLeaf) => new CalendarView(leaf, this));
 
-    this.addRibbonIcon("calendar", "Открыть Smart Calendar", () => {
+    this.addRibbonIcon("calendar", "Open Smart Calendar", () => {
       void this.activateView();
     });
 
     this.addCommand({
       id: "open-calendar",
-      name: "Открыть календарь",
+      name: "Open calendar",
       callback: () => void this.activateView(),
     });
 
     for (const g of GRANULARITIES) {
       this.addCommand({
         id: `open-today-${g}`,
-        name: `Открыть текущую ${GRANULARITY_LABELS[g].toLowerCase()} заметку`,
+        name: `Open current ${GRANULARITY_LABELS[g].toLowerCase()} note`,
         callback: () => void this.openPeriodNote(g, moment()),
       });
       this.addCommand({
         id: `open-prev-${g}`,
-        name: `Открыть предыдущую заметку (${GRANULARITY_LABELS[g].toLowerCase()})`,
+        name: `Open previous note (${GRANULARITY_LABELS[g].toLowerCase()})`,
         checkCallback: (checking) => {
           const active = this.activeNoteDate(g);
           if (!active) return false;
@@ -44,7 +44,7 @@ export default class SmartCalendarPlugin extends Plugin {
       });
       this.addCommand({
         id: `open-next-${g}`,
-        name: `Открыть следующую заметку (${GRANULARITY_LABELS[g].toLowerCase()})`,
+        name: `Open next note (${GRANULARITY_LABELS[g].toLowerCase()})`,
         checkCallback: (checking) => {
           const active = this.activeNoteDate(g);
           if (!active) return false;
@@ -56,7 +56,7 @@ export default class SmartCalendarPlugin extends Plugin {
 
     this.addCommand({
       id: "organize-daily-notes",
-      name: "Разложить ежедневные заметки по папкам",
+      name: "Organize daily notes into folders",
       callback: () => this.runOrganizeCommand(),
     });
 
@@ -121,10 +121,10 @@ export default class SmartCalendarPlugin extends Plugin {
       const result = await runMigration(this.app, moves);
       if (result.skipped.length > 0) {
         new Notice(
-          `Перенесено заметок: ${result.moved}. Пропущено из-за конфликта имён: ${result.skipped.length}.`
+          `Notes moved: ${result.moved}. Skipped due to name conflicts: ${result.skipped.length}.`
         );
       } else {
-        new Notice(`Перенесено заметок: ${result.moved}.`);
+        new Notice(`Notes moved: ${result.moved}.`);
       }
     }).open();
   }

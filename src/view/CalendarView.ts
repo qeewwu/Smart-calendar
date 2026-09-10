@@ -81,7 +81,7 @@ export class CalendarView extends ItemView {
     prevBtn.addEventListener("click", () => this.goTo(this.cursor.clone().subtract(1, "month")));
 
     const title = header.createDiv({ cls: "smart-calendar-title" });
-    title.setText(this.cursor.format("MMMM YYYY"));
+    title.setText(this.cursor.clone().locale("en").format("MMMM YYYY"));
     if (this.plugin.settings.periods.month.enabled) {
       title.addClass("is-clickable");
       title.addEventListener("click", () => {
@@ -92,7 +92,7 @@ export class CalendarView extends ItemView {
     const nextBtn = header.createDiv({ cls: "smart-calendar-nav-btn", text: "›" });
     nextBtn.addEventListener("click", () => this.goTo(this.cursor.clone().add(1, "month")));
 
-    const todayBtn = header.createDiv({ cls: "smart-calendar-today-btn", text: "Сегодня" });
+    const todayBtn = header.createDiv({ cls: "smart-calendar-today-btn", text: "Today" });
     todayBtn.addEventListener("click", () => this.goTo(moment()));
   }
 

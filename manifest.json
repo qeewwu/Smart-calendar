@@ -3,7 +3,7 @@
   "name": "Smart Calendar",
   "version": "0.1.0",
   "minAppVersion": "1.5.0",
-  "description": "Календарь с ежедневными, недельными, месячными, квартальными и годовыми заметками, автоприменением шаблонов и авто-раскладкой по папкам месяцев.",
+  "description": "A calendar with daily, weekly, monthly, quarterly and yearly notes, automatic template application, and auto-filing into month folders.",
   "author": "gricheba",
   "authorUrl": "",
   "isDesktopOnly": false

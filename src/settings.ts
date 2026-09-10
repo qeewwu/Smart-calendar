@@ -36,9 +36,9 @@ export const DEFAULT_SETTINGS: Settings = {
 };
 
 export const GRANULARITY_LABELS: Record<Granularity, string> = {
-  day: "Ежедневные",
-  week: "Недельные",
-  month: "Месячные",
-  quarter: "Квартальные",
-  year: "Годовые",
+  day: "Daily",
+  week: "Weekly",
+  month: "Monthly",
+  quarter: "Quarterly",
+  year: "Yearly",
 };

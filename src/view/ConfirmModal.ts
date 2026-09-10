@@ -13,18 +13,18 @@ export class ConfirmMigrationModal extends Modal {
   onOpen(): void {
     const { contentEl } = this;
     contentEl.empty();
-    contentEl.createEl("h2", { text: "Разложить ежедневные заметки по папкам" });
+    contentEl.createEl("h2", { text: "Organize daily notes into folders" });
 
     if (this.moves.length === 0) {
-      contentEl.createEl("p", { text: "Все ежедневные заметки уже лежат в своих папках месяцев." });
+      contentEl.createEl("p", { text: "All daily notes are already in their month folders." });
       new Setting(contentEl).addButton((b) =>
-        b.setButtonText("Закрыть").onClick(() => this.close())
+        b.setButtonText("Close").onClick(() => this.close())
       );
       return;
     }
 
     contentEl.createEl("p", {
-      text: `Будет перенесено заметок: ${this.moves.length}. Ссылки на них будут обновлены автоматически.`,
+      text: `Notes to move: ${this.moves.length}. Links to them will be updated automatically.`,
     });
 
     const list = contentEl.createEl("div", { cls: "smart-calendar-migration-list" });
@@ -36,10 +36,10 @@ export class ConfirmMigrationModal extends Modal {
     }
 
     new Setting(contentEl)
-      .addButton((b) => b.setButtonText("Отмена").onClick(() => this.close()))
+      .addButton((b) => b.setButtonText("Cancel").onClick(() => this.close()))
       .addButton((b) =>
         b
-          .setButtonText(`Перенести (${this.moves.length})`)
+          .setButtonText(`Move (${this.moves.length})`)
           .setCta()
           .onClick(() => {
             this.close();
