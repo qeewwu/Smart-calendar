@@ -144,8 +144,30 @@
   color: var(--text-faint);
 }
 
+.smart-calendar-day {
+  position: relative;
+}
+
 .smart-calendar-day.has-note {
   font-weight: var(--font-semibold);
+}
+
+/* Единственная точка-индикатор "заметка существует" — не связана с числом слов,
+   не масштабируется и не множится, поэтому остаётся минималистичной. */
+.smart-calendar-day.has-note::after {
+  content: "";
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--text-accent);
+}
+
+.smart-calendar-day.has-note.is-today::after {
+  background: var(--text-on-accent);
 }
 
 .smart-calendar-day.is-today {

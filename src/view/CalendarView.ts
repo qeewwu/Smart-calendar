@@ -27,10 +27,26 @@ export class CalendarView extends ItemView {
 
   async onOpen(): Promise<void> {
     this.render();
+
+    // Живое обновление: создание/удаление/переименование заметки в любом месте хранилища
+    // должно сразу отразиться на отметках "есть заметка" в открытом календаре.
+    const scheduleRefresh = this.debouncedRender();
+    this.registerEvent(this.app.vault.on("create", scheduleRefresh));
+    this.registerEvent(this.app.vault.on("delete", scheduleRefresh));
+    this.registerEvent(this.app.vault.on("rename", scheduleRefresh));
   }
 
   async onClose(): Promise<void> {
     this.contentEl.empty();
+  }
+
+  /** Схлопывает частые события хранилища (например, пачку файлов при синхронизации) в одну перерисовку. */
+  private debouncedRender(): () => void {
+    let timer: number | undefined;
+    return () => {
+      if (timer !== undefined) window.clearTimeout(timer);
+      timer = window.setTimeout(() => this.render(), 200);
+    };
   }
 
   public refresh(): void {
