@@ -20,7 +20,12 @@ export function pathFor(date: Moment, g: Granularity, settings: Settings): strin
   return normalizePath(`${folderFor(date, g, settings)}/${name}.md`);
 }
 
-/** Ищет существующий файл заметки. Для дня также проверяет корень папки Daily (нерасложенные старые заметки). */
+/**
+ * Ищет существующий файл заметки. Для дня, если её нет по текущему пути (текущий формат
+ * подпапки месяца), дополнительно ищет её по всей папке Daily рекурсивно — так заметки,
+ * созданные при старом значении dailySubfolderFormat (или лежащие в корне Daily), всё равно
+ * находятся, а не дублируются пустым файлом по новому пути.
+ */
 export function findNote(app: App, date: Moment, g: Granularity, settings: Settings): TFile | null {
   const primary = pathFor(date, g, settings);
   const byPrimary = app.vault.getAbstractFileByPath(primary);
@@ -28,10 +33,22 @@ export function findNote(app: App, date: Moment, g: Granularity, settings: Setti
 
   if (g === "day") {
     const cfg = settings.periods.day;
-    const name = formatName(date, cfg.format);
-    const fallback = normalizePath(`${cfg.folder}/${name}.md`);
-    const byFallback = app.vault.getAbstractFileByPath(fallback);
-    if (byFallback instanceof TFile) return byFallback;
+    const fileName = `${formatName(date, cfg.format)}.md`;
+    const root = app.vault.getAbstractFileByPath(normalizePath(cfg.folder));
+    if (root instanceof TFolder) return findFileByName(root, fileName);
+  }
+  return null;
+}
+
+function findFileByName(folder: TFolder, fileName: string): TFile | null {
+  for (const child of folder.children) {
+    if (child instanceof TFile && child.name === fileName) return child;
+  }
+  for (const child of folder.children) {
+    if (child instanceof TFolder) {
+      const found = findFileByName(child, fileName);
+      if (found) return found;
+    }
   }
   return null;
 }

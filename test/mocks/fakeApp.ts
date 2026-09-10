@@ -12,12 +12,6 @@ export class FakeVault {
     this.folders.set("", root);
   }
 
-  private folderOf(path: string): TFolder | undefined {
-    const idx = path.lastIndexOf("/");
-    const parentPath = idx === -1 ? "" : path.slice(0, idx);
-    return this.folders.get(parentPath);
-  }
-
   addFolder(path: string): TFolder {
     path = normalizePath(path);
     const existing = this.folders.get(path);
@@ -26,11 +20,13 @@ export class FakeVault {
     folder.path = path;
     folder.name = path.split("/").pop() ?? path;
     this.folders.set(path, folder);
-    const parent = this.folderOf(path);
-    if (parent) {
-      folder.parent = parent;
-      parent.children.push(folder);
-    }
+    // Как в настоящем Obsidian: промежуточные папки-предки всегда существуют,
+    // создаём их рекурсивно, если их ещё нет.
+    const idx = path.lastIndexOf("/");
+    const parentPath = idx === -1 ? "" : path.slice(0, idx);
+    const parent = this.folders.get(parentPath) ?? this.addFolder(parentPath);
+    folder.parent = parent;
+    parent.children.push(folder);
     return folder;
   }
 
