@@ -1,7 +1,7 @@
 {
   "id": "smart-calendar",
   "name": "Smart Calendar",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "minAppVersion": "1.5.0",
   "description": "A calendar with daily, weekly, monthly, quarterly and yearly notes, automatic template application, and auto-filing into month folders.",
   "author": "gricheba",
