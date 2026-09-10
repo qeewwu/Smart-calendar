@@ -3,6 +3,7 @@ import type SmartCalendarPlugin from "./main";
 import { GRANULARITIES, formatName } from "./periods";
 import { GRANULARITY_LABELS } from "./settings";
 import { moment } from "obsidian";
+import { FolderSuggest, TemplateFileSuggest } from "./view/Suggesters";
 
 export class SmartCalendarSettingTab extends PluginSettingTab {
   constructor(app: App, private plugin: SmartCalendarPlugin) {
@@ -135,12 +136,16 @@ export class SmartCalendarSettingTab extends PluginSettingTab {
       );
     }
 
-    new Setting(containerEl).setName("Folder").addText((t) =>
+    new Setting(containerEl).setName("Folder").addText((t) => {
       t.setValue(cfg.folder).onChange(async (v) => {
         cfg.folder = v || cfg.folder;
         await this.plugin.saveSettings();
-      })
-    );
+      });
+      new FolderSuggest(this.app, t.inputEl, (folder) => {
+        cfg.folder = folder.path;
+        void this.plugin.saveSettings();
+      });
+    });
 
     const example = containerEl.createEl("div", { cls: "setting-item-description smart-calendar-format-example" });
     new Setting(containerEl).setName("Filename format").addText((t) => {
@@ -160,6 +165,10 @@ export class SmartCalendarSettingTab extends PluginSettingTab {
         t.setValue(cfg.template).onChange(async (v) => {
           cfg.template = v;
           await this.plugin.saveSettings();
+        });
+        new TemplateFileSuggest(this.app, t.inputEl, (file) => {
+          cfg.template = file.path;
+          void this.plugin.saveSettings();
         });
       });
   }
